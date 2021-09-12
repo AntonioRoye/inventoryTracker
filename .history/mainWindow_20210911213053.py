@@ -83,9 +83,9 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuExit.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.addItem.clicked.connect(lambda: self.showAddItemDlg("Add Item"))
+        self.addItem.clicked.connect(self.showAddItemDlg)
         self.deleteItem.clicked.connect(self.showSearchItemDlg)
-        self.editItem.clicked.connect(lambda : self.showEditItemdDlg("Edit Item"))
+        self.editItem.clicked.connect(self.showEditItemdDlg)
         self.orderItem.clicked.connect(self.orderItem.click)
         self.viewItem.clicked.connect(self.showViewItemDlg)
         self.viewInventory.clicked.connect(self.showViewInventoryDlg)
@@ -119,8 +119,8 @@ class Ui_MainWindow(object):
         self.actionPrint.setText(_translate("MainWindow", "Print"))
         self.actionPrint.setShortcut(_translate("MainWindow", "Ctrl+P"))
         
-    def showAddItemDlg(self, windowTitle = None):
-        dlg = ItemDlg(windowTitle)
+    def showAddItemDlg(self):
+        dlg = AddItemDlg()
         dlg.exec()
         
     def showSearchItemDlg(self):
@@ -136,16 +136,16 @@ class Ui_MainWindow(object):
         dlg = ViewInventoryDlg()
         dlg.exec()
     
-    def showEditItemdDlg(self, windowTitle = None):
+    def showEditItemdDlg(self):
         self.showSearchItemDlg()
-        self.showAddItemDlg("Edit Item")
+        self.showAddItemDlg()
 
-class ItemDlg(QDialog):
+class AddItemDlg(QDialog):
     """Add item dialog"""
-    def __init__(self, windowTitle = None):
+    def __init__(self):
         super().__init__()
         # Create an instance of the GUI
-        self.ui = addItemDialog.Ui_Dialog(windowTitle)
+        self.ui = addItemDialog.Ui_Dialog()
         # Run the .setupUi() method to show the GUI
         self.ui.setupUi(self)
 

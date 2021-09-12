@@ -10,7 +10,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 
 
 class Ui_Dialog(object):
-    def __init__(self, windowTitle = None):
+    def __init__(self, windowTitle = "Add Item"):
         self.windowTitle = windowTitle
         
     def setupUi(self, Dialog):

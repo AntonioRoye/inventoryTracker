@@ -120,7 +120,7 @@ class Ui_MainWindow(object):
         self.actionPrint.setShortcut(_translate("MainWindow", "Ctrl+P"))
         
     def showAddItemDlg(self, windowTitle = None):
-        dlg = ItemDlg(windowTitle)
+        dlg = AddItemDlg(windowTitle)
         dlg.exec()
         
     def showSearchItemDlg(self):
@@ -136,11 +136,11 @@ class Ui_MainWindow(object):
         dlg = ViewInventoryDlg()
         dlg.exec()
     
-    def showEditItemdDlg(self, windowTitle = None):
+    def showEditItemdDlg(self):
         self.showSearchItemDlg()
         self.showAddItemDlg("Edit Item")
 
-class ItemDlg(QDialog):
+class AddItemDlg(QDialog):
     """Add item dialog"""
     def __init__(self, windowTitle = None):
         super().__init__()

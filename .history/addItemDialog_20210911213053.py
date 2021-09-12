@@ -10,9 +10,6 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 
 
 class Ui_Dialog(object):
-    def __init__(self, windowTitle = None):
-        self.windowTitle = windowTitle
-        
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(414, 562)
@@ -120,7 +117,7 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", self.windowTitle))
+        Dialog.setWindowTitle(_translate("Dialog", "Add Item"))
         self.companyWebsiteLabel.setText(_translate("Dialog", "Company website:"))
         self.companyLabel.setText(_translate("Dialog", "Company:"))
         self.priceLabel.setText(_translate("Dialog", "Price:"))
