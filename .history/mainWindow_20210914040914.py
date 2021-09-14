@@ -89,7 +89,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         self.addItem.clicked.connect(lambda: self.showAddItemDlg("Add Item"))
         self.deleteItem.clicked.connect(self.showDeleteItemdDlg)
-        self.editItem.clicked.connect(lambda : self.showEditItemdDlg)
+        self.editItem.clicked.connect(lambda : self.showEditItemdDlg("Edit Item"))
         self.orderItem.clicked.connect(self.orderItem.click)
         self.viewItem.clicked.connect(self.showViewItemDlg)
         self.viewInventory.clicked.connect(self.showViewInventoryDlg)
@@ -139,7 +139,6 @@ class Ui_MainWindow(object):
                     return
                 try:
                     self.database.insertItem(dlg.ui.vals)
-                    self.showMessage("Item successfully added", "The item was added to inventory.")
                 except sqlite3.IntegrityError:
                     self.showMessage("The item was not added to inventory", "The specified product code already exists in inventory.")
         else:
@@ -174,7 +173,7 @@ class Ui_MainWindow(object):
         dlg.ui.addRows(self.database.viewInventory())
         dlg.exec()
     
-    def showEditItemdDlg(self):
+    def showEditItemdDlg(self, windowTitle = None):
         productCodeToSearch = self.showSearchItemDlg()
         self.showAddItemDlg("Edit Item", productCodeToSearch)
     
