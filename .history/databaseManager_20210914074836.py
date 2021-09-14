@@ -44,15 +44,14 @@ class InventoryDatabase():
         connection = sqlite3.connect(self._database)
         crsr = connection.cursor()
         
-        if crsr.execute("SELECT * FROM INVENTORY WHERE PRODUCTCODE = \"{0}\";".format(productCode)).fetchone():
-            crsr.execute("DELETE FROM INVENTORY WHERE PRODUCTCODE = \"{0}\";".format(productCode))
-            connection.commit()
-            connection.close()
-            return True
+        if crsr.execute("SELECT 1 FROM airports WHERE ICAO = 'EHAM'").fetchone():
+            print("Found!")
         else:
-            connection.commit()
-            connection.close()
-            return False
+            print("Not found...")
+        crsr.execute("DELETE FROM INVENTORY WHERE PRODUCTCODE = \"{0}\";".format(productCode))
+        
+        connection.commit()
+        connection.close()
 
     def updateItem(self, oldProductCode, valuesList):
         connection = sqlite3.connect(self._database)

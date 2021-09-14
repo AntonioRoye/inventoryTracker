@@ -89,7 +89,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         self.addItem.clicked.connect(lambda: self.showAddItemDlg("Add Item"))
         self.deleteItem.clicked.connect(self.showDeleteItemdDlg)
-        self.editItem.clicked.connect(self.showEditItemdDlg)
+        self.editItem.clicked.connect(lambda : self.showEditItemdDlg)
         self.orderItem.clicked.connect(self.orderItem.click)
         self.viewItem.clicked.connect(self.showViewItemDlg)
         self.viewInventory.clicked.connect(self.showViewInventoryDlg)
@@ -134,7 +134,7 @@ class Ui_MainWindow(object):
             dlg = ItemDlg(windowTitle)
             returnVal = dlg.exec()
             if returnVal == 1:
-                if dlg.ui.vals[1] == "":
+                if dlg.ui.vals[0] == "":
                     self.showMessage("The item was not added to inventory", "No product code was specified.")
                     return
                 try:
@@ -156,7 +156,7 @@ class Ui_MainWindow(object):
     def showSearchItemDlg(self):
         dlg = SearchItemDlg()
         returnVal = dlg.exec()
-        if returnVal == 1:
+        if returnVal == 1 and dlg.ui.productCodeInput != "":
             return dlg.ui.productCodeInput
         else:
             return None
@@ -182,7 +182,7 @@ class Ui_MainWindow(object):
         productCodeToSearch = self.showSearchItemDlg()
         if productCodeToSearch != None:
             retVal = self.database.delItem(productCodeToSearch)
-            if not retVal:
+            if retVal == 0:
                 self.showMessage("Item was not deleted", "Try a different product code.")
             else:
                 print(retVal)

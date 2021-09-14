@@ -43,16 +43,11 @@ class InventoryDatabase():
     def delItem(self, productCode):
         connection = sqlite3.connect(self._database)
         crsr = connection.cursor()
+
+        crsr.execute("DELETE FROM INVENTORY WHERE PRODUCTCODE = \"{0}\";".format(productCode))
         
-        if crsr.execute("SELECT * FROM INVENTORY WHERE PRODUCTCODE = \"{0}\";".format(productCode)).fetchone():
-            crsr.execute("DELETE FROM INVENTORY WHERE PRODUCTCODE = \"{0}\";".format(productCode))
-            connection.commit()
-            connection.close()
-            return True
-        else:
-            connection.commit()
-            connection.close()
-            return False
+        connection.commit()
+        connection.close()
 
     def updateItem(self, oldProductCode, valuesList):
         connection = sqlite3.connect(self._database)

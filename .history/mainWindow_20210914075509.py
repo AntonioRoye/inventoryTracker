@@ -134,7 +134,7 @@ class Ui_MainWindow(object):
             dlg = ItemDlg(windowTitle)
             returnVal = dlg.exec()
             if returnVal == 1:
-                if dlg.ui.vals[1] == "":
+                if dlg.ui.vals[0] == "":
                     self.showMessage("The item was not added to inventory", "No product code was specified.")
                     return
                 try:
