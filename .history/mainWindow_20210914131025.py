@@ -150,7 +150,8 @@ class Ui_MainWindow(object):
                 returnVal = dlg.exec()
                 if returnVal == 1:
                     self.database.updateItem(productCode, dlg.ui.vals)
-                    self.showMessage("Item successfully updated", "An item in inventory was changed.")
+                else:
+                    self.showMessage("The item was not retrieved from inventory", "The specified product code could not be found in inventory.")
             
         
     def showSearchItemDlg(self):
@@ -165,12 +166,12 @@ class Ui_MainWindow(object):
         productCodeToSearch = self.showSearchItemDlg()
         returnItem = self.database.viewItem(productCodeToSearch)
         dlg = ViewItemDlg()
-        if productCodeToSearch != None:
-            if returnItem != False:
-                dlg.ui.setValues(returnItem)
-                dlg.exec()
-            else:
-                self.showMessage("The item was not retrieved from inventory", "The specified product code could not be found in inventory.")
+        
+        if returnItem != False:
+            dlg.ui.setValues(returnItem)
+            dlg.exec()
+        else:
+            self.showMessage("The item was not retrieved from inventory", "The specified product code could not be found in inventory.")
     
     def showViewInventoryDlg(self):
         dlg = ViewInventoryDlg()
@@ -179,12 +180,8 @@ class Ui_MainWindow(object):
     
     def showEditItemdDlg(self):
         productCodeToSearch = self.showSearchItemDlg()
-        if productCodeToSearch != None:
-            if  productCodeToSearch != "":
-                self.showAddItemDlg("Edit Item", productCodeToSearch)
-            else:
-                self.showMessage("The item was not retrieved from inventory", "The specified product code could not be found in inventory.")
-                
+        self.showAddItemDlg("Edit Item", productCodeToSearch)
+    
     def showDeleteItemdDlg(self):
         productCodeToSearch = self.showSearchItemDlg()
         if productCodeToSearch != None:

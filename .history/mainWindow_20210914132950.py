@@ -184,7 +184,9 @@ class Ui_MainWindow(object):
                 self.showAddItemDlg("Edit Item", productCodeToSearch)
             else:
                 self.showMessage("The item was not retrieved from inventory", "The specified product code could not be found in inventory.")
-                
+        else:
+            return
+    
     def showDeleteItemdDlg(self):
         productCodeToSearch = self.showSearchItemDlg()
         if productCodeToSearch != None:

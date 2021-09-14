@@ -82,7 +82,7 @@ class InventoryDatabase():
     def viewInventory(self):
         connection = sqlite3.connect(self._database)
         crsr = connection.cursor()
-        crsr.execute("SELECT * FROM INVENTORY ORDER BY DATERECEIVED DESC")
+        crsr.execute("SELECT * FROM INVENTORY ORDER BY DATERECEIVED")
         ans = crsr.fetchall()
         connection.close()
         

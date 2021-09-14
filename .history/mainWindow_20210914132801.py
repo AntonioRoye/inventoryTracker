@@ -165,12 +165,12 @@ class Ui_MainWindow(object):
         productCodeToSearch = self.showSearchItemDlg()
         returnItem = self.database.viewItem(productCodeToSearch)
         dlg = ViewItemDlg()
-        if productCodeToSearch != None:
-            if returnItem != False:
-                dlg.ui.setValues(returnItem)
-                dlg.exec()
-            else:
-                self.showMessage("The item was not retrieved from inventory", "The specified product code could not be found in inventory.")
+        
+        if returnItem != False:
+            dlg.ui.setValues(returnItem)
+            dlg.exec()
+        else:
+            self.showMessage("The item was not retrieved from inventory", "The specified product code could not be found in inventory.")
     
     def showViewInventoryDlg(self):
         dlg = ViewInventoryDlg()
@@ -184,7 +184,9 @@ class Ui_MainWindow(object):
                 self.showAddItemDlg("Edit Item", productCodeToSearch)
             else:
                 self.showMessage("The item was not retrieved from inventory", "The specified product code could not be found in inventory.")
-                
+        else:
+            return
+    
     def showDeleteItemdDlg(self):
         productCodeToSearch = self.showSearchItemDlg()
         if productCodeToSearch != None:
