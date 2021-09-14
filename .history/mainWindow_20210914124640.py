@@ -163,14 +163,12 @@ class Ui_MainWindow(object):
     
     def showViewItemDlg(self):
         productCodeToSearch = self.showSearchItemDlg()
+        print(productCodeToSearch)
+        print("Hello")
         returnItem = self.database.viewItem(productCodeToSearch)
         dlg = ViewItemDlg()
-        
-        if returnItem != False:
-            dlg.ui.setValues(returnItem)
-            dlg.exec()
-        else:
-            self.showMessage("The item was not retrieved from inventory", "The specified product code could not be found in inventory.")
+        dlg.ui.setValues(returnItem)
+        dlg.exec()
     
     def showViewInventoryDlg(self):
         dlg = ViewInventoryDlg()
