@@ -103,4 +103,4 @@ class InventoryDatabase():
             return False
     
     def saveToCSV(self):
-        pass
+        
