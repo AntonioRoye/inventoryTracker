@@ -14,7 +14,6 @@ import sqlite3
 class Ui_MainWindow(object):
     def __init__(self):
         self.database = databaseManager.InventoryDatabase()
-        self.msg = QtWidgets.QMessageBox()
         
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -129,19 +128,18 @@ class Ui_MainWindow(object):
             dlg = ItemDlg(windowTitle)
             returnVal = dlg.exec()
             if returnVal == 1:
-                if dlg.ui.vals[0] == "":
-                    self.msg.setText("The item was not added to inventory")
-                    self.msg.setInformativeText("No product code was specified.")
-                    self.msg.setWindowTitle("Error")
-                    self.msg.exec()
-                    return
                 try:
                     self.database.insertItem(dlg.ui.vals)
                 except sqlite3.IntegrityError:
-                    self.msg.setText("The item was not added to inventory")
-                    self.msg.setInformativeText("The specified product code already exists in inventory.")
-                    self.msg.setWindowTitle("Error")
-                    self.msg.exec()
+                    msg = QtWidgets.QMessageBox()
+                    msg.setIcon(QtWidgets.QMessageBox.Information)
+                    msg.setText("This is a message box")
+                    msg.setInformativeText("This is additional information")
+                    msg.setWindowTitle("MessageBox demo")
+                    msg.setDetailedText("The details are as follows:")
+                    msg.setStandardButtons(QtWidgets.QMessageBox.Ok | QtWidgets.QMessageBox.Cancel)
+                    msg.buttonClicked.connect(QtWidgets.QMessageBox)
+                    retval = msg.exec_()
         else:
             returnItem = self.database.viewItem(productCode)
             dlg = ItemDlg(windowTitle)
