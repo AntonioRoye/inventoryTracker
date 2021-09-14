@@ -147,11 +147,11 @@ class Ui_MainWindow(object):
             
             if returnItem != False:
                 dlg.ui.setValues(returnItem)
-                returnVal = dlg.exec()
-                if returnVal == 1:
-                    self.database.updateItem(productCode, dlg.ui.vals)
-            else:
-                self.showMessage("The item was not retrieved from inventory", "The specified product code could not be found in inventory.")
+            
+            returnVal = dlg.exec()
+            
+            if returnVal == 1:
+                self.database.updateItem(productCode, dlg.ui.vals)
         
     def showSearchItemDlg(self):
         dlg = SearchItemDlg()

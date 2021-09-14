@@ -95,9 +95,6 @@ class InventoryDatabase():
         crsr.execute(
             "SELECT * FROM INVENTORY WHERE PRODUCTCODE = \"{0}\";".format(productCode))
         ans = crsr.fetchall()
+        print(ans)
         connection.close()
-        
-        if ans:
-            return list(ans[0])
-        else:
-            return False
+        return list(ans[0])

@@ -144,14 +144,10 @@ class Ui_MainWindow(object):
         else:
             returnItem = self.database.viewItem(productCode)
             dlg = ItemDlg(windowTitle)
-            
-            if returnItem != False:
-                dlg.ui.setValues(returnItem)
-                returnVal = dlg.exec()
-                if returnVal == 1:
-                    self.database.updateItem(productCode, dlg.ui.vals)
-            else:
-                self.showMessage("The item was not retrieved from inventory", "The specified product code could not be found in inventory.")
+            dlg.ui.setValues(returnItem)
+            returnVal = dlg.exec()
+            if returnVal == 1:
+                self.database.updateItem(productCode, dlg.ui.vals)
         
     def showSearchItemDlg(self):
         dlg = SearchItemDlg()
@@ -185,6 +181,7 @@ class Ui_MainWindow(object):
             if not retVal:
                 self.showMessage("Item was not deleted", "Try a different product code.")
             else:
+                print(retVal)
                 self.showMessage("Item successfully deleted", "The item was removed from inventory.")
         
 
