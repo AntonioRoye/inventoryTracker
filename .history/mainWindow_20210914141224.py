@@ -68,6 +68,8 @@ class Ui_MainWindow(object):
         self.statusBar = QtWidgets.QStatusBar(MainWindow)
         self.statusBar.setObjectName("statusBar")
         MainWindow.setStatusBar(self.statusBar)
+        self.actionConfigurations = QtGui.QAction(MainWindow)
+        self.actionConfigurations.setObjectName("actionConfigurations")
         self.actionCopy = QtGui.QAction(MainWindow)
         self.actionCopy.setObjectName("actionCopy")
         self.actionPaste = QtGui.QAction(MainWindow)
@@ -87,6 +89,7 @@ class Ui_MainWindow(object):
         self.menuEdit.addAction(self.actionCopy)
         self.menuEdit.addAction(self.actionPaste)
         self.menuEdit.addAction(self.actionCut)
+        self.menuSettings.addAction(self.actionConfigurations)
         self.menuSettings.addAction(self.actionCreate_new_Admin)
         self.menuHelp.addAction(self.actionDocumentation)
         self.menubar.addAction(self.menuFile.menuAction())
@@ -95,12 +98,12 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.addItem.clicked.connect(lambda: self.showAddItemDlg("Add Item"))
-        self.deleteItem.clicked.connect(self.showDeleteItemdDlg)
-        self.editItem.clicked.connect(self.showEditItemdDlg)
+        self.addItem.clicked.connect(self.addItem.click)
+        self.deleteItem.clicked.connect(self.deleteItem.click)
+        self.editItem.clicked.connect(self.editItem.click)
         self.orderItem.clicked.connect(self.orderItem.click)
-        self.viewItem.clicked.connect(self.showViewItemDlg)
-        self.viewInventory.clicked.connect(self.showViewInventoryDlg)
+        self.viewItem.clicked.connect(self.viewItem.click)
+        self.viewInventory.clicked.connect(self.viewInventory.click)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         MainWindow.setTabOrder(self.addItem, self.deleteItem)
         MainWindow.setTabOrder(self.deleteItem, self.editItem)
@@ -121,141 +124,17 @@ class Ui_MainWindow(object):
         self.menuEdit.setTitle(_translate("MainWindow", "Edit"))
         self.menuSettings.setTitle(_translate("MainWindow", "Settings"))
         self.menuHelp.setTitle(_translate("MainWindow", "Help"))
+        self.actionConfigurations.setText(_translate("MainWindow", "Configurations"))
         self.actionCopy.setText(_translate("MainWindow", "Copy"))
         self.actionCopy.setShortcut(_translate("MainWindow", "Ctrl+C"))
         self.actionPaste.setText(_translate("MainWindow", "Paste"))
         self.actionPaste.setShortcut(_translate("MainWindow", "Ctrl+V"))
-        self.actionCut.setText(_translate("MainWindow", "Cut"))
         self.actionSave_to_file.setText(_translate("MainWindow", "Save to CSV"))
         self.actionPrint.setText(_translate("MainWindow", "Print"))
         self.actionPrint.setShortcut(_translate("MainWindow", "Ctrl+P"))
-        self.actionCreate_new_Admin.setText(_translate("MainWindow", "Create new admin"))
         self.actionDocumentation.setText(_translate("MainWindow", "Documentation"))
-
-    def showMessage(self, text, informativeText):
-        self.msg.setText(text)
-        self.msg.setInformativeText(informativeText)
-        self.msg.exec()
-
-    def showAddItemDlg(self, windowTitle=None, productCode=None):
-        if windowTitle == "Add Item":
-            dlg = ItemDlg(windowTitle)
-            returnVal = dlg.exec()
-            if returnVal == 1:
-                if dlg.ui.vals[1] == "":
-                    self.showMessage(
-                        "The item was not added to inventory", "No product code was specified.")
-                    return
-                try:
-                    self.database.insertItem(dlg.ui.vals)
-                    self.showMessage("Item successfully added",
-                                     "The item was added to inventory.")
-                except sqlite3.IntegrityError:
-                    self.showMessage("The item was not added to inventory",
-                                     "The specified product code already exists in inventory.")
-        else:
-            returnItem = self.database.viewItem(productCode)
-            dlg = ItemDlg(windowTitle)
-
-            if returnItem != False:
-                dlg.ui.setValues(returnItem)
-                returnVal = dlg.exec()
-                if returnVal == 1:
-                    self.database.updateItem(productCode, dlg.ui.vals)
-                    self.showMessage("Item successfully updated",
-                                     "An item in inventory was changed.")
-            else:
-                self.showMessage("The item was not retrieved from inventory",
-                                 "The specified product code could not be found in inventory.")
-
-    def showSearchItemDlg(self):
-        dlg = SearchItemDlg()
-        returnVal = dlg.exec()
-        if returnVal == 1:
-            return dlg.ui.productCodeInput
-        else:
-            return None
-
-    def showViewItemDlg(self):
-        productCodeToSearch = self.showSearchItemDlg()
-        returnItem = self.database.viewItem(productCodeToSearch)
-        dlg = ViewItemDlg()
-        if productCodeToSearch != None:
-            if returnItem != False:
-                dlg.ui.setValues(returnItem)
-                dlg.exec()
-            else:
-                self.showMessage("The item was not retrieved from inventory",
-                                 "The specified product code could not be found in inventory.")
-
-    def showViewInventoryDlg(self):
-        dlg = ViewInventoryDlg()
-        dlg.ui.addRows(self.database.viewInventory())
-        dlg.exec()
-
-    def showEditItemdDlg(self):
-        productCodeToSearch = self.showSearchItemDlg()
-        if productCodeToSearch != None:
-            if productCodeToSearch != "":
-                self.showAddItemDlg("Edit Item", productCodeToSearch)
-            else:
-                self.showMessage("The item was not retrieved from inventory",
-                                 "The specified product code could not be found in inventory.")
-
-    def showDeleteItemdDlg(self):
-        productCodeToSearch = self.showSearchItemDlg()
-        if productCodeToSearch != None:
-            retVal = self.database.delItem(productCodeToSearch)
-            if not retVal:
-                self.showMessage("Item was not deleted",
-                                 "Try a different product code.")
-            else:
-                self.showMessage("Item successfully deleted",
-                                 "The item was removed from inventory.")
-
-
-class ItemDlg(QDialog):
-    """Add item dialog"""
-
-    def __init__(self, windowTitle=None):
-        super().__init__()
-        # Create an instance of the GUI
-        self.ui = addItemDialog.Ui_Dialog(windowTitle)
-        # Run the .setupUi() method to show the GUI
-        self.ui.setupUi(self)
-
-
-class SearchItemDlg(QDialog):
-    """Search item dialog"""
-
-    def __init__(self):
-        super().__init__()
-        # Create an instance of the GUI
-        self.ui = itemSearch.Ui_Dialog()
-        # Run the .setupUi() method to show the GUI
-        self.ui.setupUi(self)
-
-
-class ViewItemDlg(QDialog):
-    """View item dialog"""
-
-    def __init__(self):
-        super().__init__()
-        # Create an instance of the GUI
-        self.ui = viewItemDialog.Ui_Dialog()
-        # Run the .setupUi() method to show the GUI
-        self.ui.setupUi(self)
-
-
-class ViewInventoryDlg(QDialog):
-    """View Inventory dialog"""
-
-    def __init__(self):
-        super().__init__()
-        # Create an instance of the GUI
-        self.ui = viewInventoryDialog.Ui_Dialog()
-        # Run the .setupUi() method to show the GUI
-        self.ui.setupUi(self)
+        self.actionCut.setText(_translate("MainWindow", "Cut"))
+        self.actionCreate_new_Admin.setText(_translate("MainWindow", "Create new Admin"))
 
 
 if __name__ == "__main__":

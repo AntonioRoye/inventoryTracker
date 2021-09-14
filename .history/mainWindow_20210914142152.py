@@ -68,6 +68,8 @@ class Ui_MainWindow(object):
         self.statusBar = QtWidgets.QStatusBar(MainWindow)
         self.statusBar.setObjectName("statusBar")
         MainWindow.setStatusBar(self.statusBar)
+        self.actionConfigurations = QtGui.QAction(MainWindow)
+        self.actionConfigurations.setObjectName("actionConfigurations")
         self.actionCopy = QtGui.QAction(MainWindow)
         self.actionCopy.setObjectName("actionCopy")
         self.actionPaste = QtGui.QAction(MainWindow)
@@ -76,19 +78,11 @@ class Ui_MainWindow(object):
         self.actionSave_to_file.setObjectName("actionSave_to_file")
         self.actionPrint = QtGui.QAction(MainWindow)
         self.actionPrint.setObjectName("actionPrint")
-        self.actionDocumentation = QtGui.QAction(MainWindow)
-        self.actionDocumentation.setObjectName("actionDocumentation")
-        self.actionCut = QtGui.QAction(MainWindow)
-        self.actionCut.setObjectName("actionCut")
-        self.actionCreate_new_Admin = QtGui.QAction(MainWindow)
-        self.actionCreate_new_Admin.setObjectName("actionCreate_new_Admin")
         self.menuFile.addAction(self.actionSave_to_file)
         self.menuFile.addAction(self.actionPrint)
         self.menuEdit.addAction(self.actionCopy)
         self.menuEdit.addAction(self.actionPaste)
-        self.menuEdit.addAction(self.actionCut)
-        self.menuSettings.addAction(self.actionCreate_new_Admin)
-        self.menuHelp.addAction(self.actionDocumentation)
+        self.menuSettings.addAction(self.actionConfigurations)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuEdit.menuAction())
         self.menubar.addAction(self.menuSettings.menuAction())
@@ -121,16 +115,15 @@ class Ui_MainWindow(object):
         self.menuEdit.setTitle(_translate("MainWindow", "Edit"))
         self.menuSettings.setTitle(_translate("MainWindow", "Settings"))
         self.menuHelp.setTitle(_translate("MainWindow", "Help"))
+        self.actionConfigurations.setText(_translate("MainWindow", "Configurations"))
         self.actionCopy.setText(_translate("MainWindow", "Copy"))
         self.actionCopy.setShortcut(_translate("MainWindow", "Ctrl+C"))
         self.actionPaste.setText(_translate("MainWindow", "Paste"))
         self.actionPaste.setShortcut(_translate("MainWindow", "Ctrl+V"))
-        self.actionCut.setText(_translate("MainWindow", "Cut"))
-        self.actionSave_to_file.setText(_translate("MainWindow", "Save to CSV"))
+        self.actionSave_to_file.setText(
+            _translate("MainWindow", "Save to file"))
         self.actionPrint.setText(_translate("MainWindow", "Print"))
         self.actionPrint.setShortcut(_translate("MainWindow", "Ctrl+P"))
-        self.actionCreate_new_Admin.setText(_translate("MainWindow", "Create new admin"))
-        self.actionDocumentation.setText(_translate("MainWindow", "Documentation"))
 
     def showMessage(self, text, informativeText):
         self.msg.setText(text)
@@ -164,9 +157,6 @@ class Ui_MainWindow(object):
                     self.database.updateItem(productCode, dlg.ui.vals)
                     self.showMessage("Item successfully updated",
                                      "An item in inventory was changed.")
-            else:
-                self.showMessage("The item was not retrieved from inventory",
-                                 "The specified product code could not be found in inventory.")
 
     def showSearchItemDlg(self):
         dlg = SearchItemDlg()

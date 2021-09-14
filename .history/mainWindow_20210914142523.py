@@ -17,10 +17,6 @@ import sqlite3
 
 
 class Ui_MainWindow(object):
-    def __init__(self):
-        self.database = databaseManager.InventoryDatabase()
-        self.msg = QtWidgets.QMessageBox()
-
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(380, 145)
@@ -68,6 +64,8 @@ class Ui_MainWindow(object):
         self.statusBar = QtWidgets.QStatusBar(MainWindow)
         self.statusBar.setObjectName("statusBar")
         MainWindow.setStatusBar(self.statusBar)
+        self.actionConfigurations = QtGui.QAction(MainWindow)
+        self.actionConfigurations.setObjectName("actionConfigurations")
         self.actionCopy = QtGui.QAction(MainWindow)
         self.actionCopy.setObjectName("actionCopy")
         self.actionPaste = QtGui.QAction(MainWindow)
@@ -87,6 +85,7 @@ class Ui_MainWindow(object):
         self.menuEdit.addAction(self.actionCopy)
         self.menuEdit.addAction(self.actionPaste)
         self.menuEdit.addAction(self.actionCut)
+        self.menuSettings.addAction(self.actionConfigurations)
         self.menuSettings.addAction(self.actionCreate_new_Admin)
         self.menuHelp.addAction(self.actionDocumentation)
         self.menubar.addAction(self.menuFile.menuAction())
@@ -95,9 +94,9 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.addItem.clicked.connect(lambda: self.showAddItemDlg("Add Item"))
-        self.deleteItem.clicked.connect(self.showDeleteItemdDlg)
-        self.editItem.clicked.connect(self.showEditItemdDlg)
+        self.addItem.clicked.connect(self.addItem.click)
+        self.deleteItem.clicked.connect(self.deleteItem.click)
+        self.editItem.clicked.connect(self.editItem.click)
         self.orderItem.clicked.connect(self.orderItem.click)
         self.viewItem.clicked.connect(self.showViewItemDlg)
         self.viewInventory.clicked.connect(self.showViewInventoryDlg)
@@ -121,16 +120,14 @@ class Ui_MainWindow(object):
         self.menuEdit.setTitle(_translate("MainWindow", "Edit"))
         self.menuSettings.setTitle(_translate("MainWindow", "Settings"))
         self.menuHelp.setTitle(_translate("MainWindow", "Help"))
+        self.actionConfigurations.setText(_translate("MainWindow", "Configurations"))
         self.actionCopy.setText(_translate("MainWindow", "Copy"))
         self.actionCopy.setShortcut(_translate("MainWindow", "Ctrl+C"))
         self.actionPaste.setText(_translate("MainWindow", "Paste"))
         self.actionPaste.setShortcut(_translate("MainWindow", "Ctrl+V"))
-        self.actionCut.setText(_translate("MainWindow", "Cut"))
         self.actionSave_to_file.setText(_translate("MainWindow", "Save to CSV"))
         self.actionPrint.setText(_translate("MainWindow", "Print"))
         self.actionPrint.setShortcut(_translate("MainWindow", "Ctrl+P"))
-        self.actionCreate_new_Admin.setText(_translate("MainWindow", "Create new admin"))
-        self.actionDocumentation.setText(_translate("MainWindow", "Documentation"))
 
     def showMessage(self, text, informativeText):
         self.msg.setText(text)
@@ -164,9 +161,6 @@ class Ui_MainWindow(object):
                     self.database.updateItem(productCode, dlg.ui.vals)
                     self.showMessage("Item successfully updated",
                                      "An item in inventory was changed.")
-            else:
-                self.showMessage("The item was not retrieved from inventory",
-                                 "The specified product code could not be found in inventory.")
 
     def showSearchItemDlg(self):
         dlg = SearchItemDlg()
